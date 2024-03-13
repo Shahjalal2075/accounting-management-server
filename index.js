@@ -137,6 +137,15 @@ async function run() {
           fechDePago: product.fechDePago,
           formaDePago: product.formaDePago,
           modificado: product.modificado,
+          monto: product.monto,
+          subTotal: product.subTotal,
+          total: product.total,
+          totalToPagar: product.totalToPagar,
+          taxs: product.taxs,
+          taxAmmount: product.taxAmmount,
+          discounts: product.discounts,
+          discountAmmount: product.discountAmmount,
+          totalDis: product.totalDis,
           
         }
       }
