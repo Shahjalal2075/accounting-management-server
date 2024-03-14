@@ -46,7 +46,7 @@ async function run() {
     })
     app.get('/user-list/:email', async (req, res) => {
       const email = req.params.email;
-      const query = {email : email }
+      const query = { email: email }
       const product = await users.findOne(query);
       res.send(product);
     })
@@ -87,13 +87,13 @@ async function run() {
       res.send(result);
     })
 
-     app.get('/purchase-invoice/:id', async (req, res) => {
+    app.get('/purchase-invoice/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const product = await purchaseInvoice.findOne(query);
       res.send(product);
     })
-     app.get('/sale-invoice/:id', async (req, res) => {
+    app.get('/sale-invoice/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) }
       const product = await saleInvoice.findOne(query);
@@ -116,6 +116,22 @@ async function run() {
           fechDePago: product.fechDePago,
           formaDePago: product.formaDePago,
           modificado: product.modificado,
+          monto: product.monto,
+          subTotal: product.subTotal,
+          total: product.total,
+          totalToPagar: product.totalToPagar,
+          count: product.count,
+          taxs: product.taxs,
+          taxAmmount: product.taxAmmount,
+          conceptoValue: product.conceptoValue,
+          enable: product.enable,
+          discounts: product.discounts,
+          discountAmmount: product.discountAmmount,
+          totalDis: product.totalDis,
+          montoList: product.montoList,
+          tipoList: product.tipoList,
+          tipoCk: product.tipoCk,
+          ammount: product.ammount,
         }
       }
       const result = await purchaseInvoice.updateOne(filter, updatedProduct, options);
@@ -146,7 +162,7 @@ async function run() {
           discounts: product.discounts,
           discountAmmount: product.discountAmmount,
           totalDis: product.totalDis,
-          
+
         }
       }
       const result = await saleInvoice.updateOne(filter, updatedProduct, options);
