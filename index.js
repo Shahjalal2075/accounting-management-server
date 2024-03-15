@@ -32,6 +32,7 @@ async function run() {
     const users = database.collection("users");
     const purchaseInvoice = database.collection("purchaseInvoice");
     const saleInvoice = database.collection("saleInvoice");
+    const salesReport = database.collection("salesReport");
 
     app.get('/user-list', async (req, res) => {
       const cursor = users.find()
@@ -44,12 +45,40 @@ async function run() {
       const result = await users.insertOne(user);
       res.send(result);
     })
+    app.get('/sales-report', async (req, res) => {
+      const cursor = salesReport.find()
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+    app.get('/sales-report/:name', async (req, res) => {
+      const name = req.params.name;
+      const query = { name: name }
+      const product = await salesReport.findOne(query);
+      res.send(product);
+    })
+    app.put('/sales-report/:name', async (req, res) => {
+      const name = req.params.name;
+      const product = req.body;
+      const filter = { name: name };
+      const options = { upsert: true };
+      console.log('update product : ', product);
+      const updatedProduct = {
+        $set: {
+          Purchase: product.Purchase,
+          Sale: product.Sale,
+        }
+      }
+      const result = await salesReport.updateOne(filter, updatedProduct, options);
+      res.send(result);
+    })
+
     app.get('/user-list/:email', async (req, res) => {
       const email = req.params.email;
       const query = { email: email }
       const product = await users.findOne(query);
       res.send(product);
     })
+
     app.patch('/user-list/:email', async (req, res) => {
       const id = req.params.email;
       const query = { email: id }
@@ -183,90 +212,6 @@ async function run() {
       const result = await saleInvoice.deleteOne(query);
       res.send(result);
     })
-
-    /* app.get('/brands', async (req, res) => {
-      const cursor = usersCollectionBrands.find()
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    app.get('/cart', async (req, res) => {
-      const cursor = usersCollectionCart.find()
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    app.get('/cart/:email', async (req, res) => {
-      const email = req.params.email;
-      const query = { email: email }
-      const product = usersCollectionCart.find(query);
-      const result = await product.toArray();
-      res.send(result);
-    })
-
-    app.get('/products', async (req, res) => {
-      const cursor = usersCollectionProducts.find()
-      const result = await cursor.toArray();
-      res.send(result);
-    })
-
-    app.get('/products/:brand', async (req, res) => {
-      const brand = req.params.brand;
-      const query = { brandName: brand }
-      const product = usersCollectionProducts.find(query);
-      const result = await product.toArray();
-      res.send(result);
-    })
-
-    app.get('/products/:brand/:id', async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
-      const product = await usersCollectionProducts.findOne(query);
-      res.send(product);
-    })
-
-    app.put('/products/:brand/:id', async (req, res) => {
-      const id = req.params.id;
-      const product = req.body;
-      const filter = { _id: new ObjectId(id) };
-      const options = { upsert: true };
-      console.log('update product : ', product);
-      const updatedProduct = {
-        $set: {
-          productName: product.productName,
-          brandName: product.brandName,
-          type: product.type,
-          price: product.price,
-          photo: product.photo,
-          rating: product.rating
-        }
-      }
-      const result = await usersCollectionProducts.updateOne(filter, updatedProduct, options);
-      res.send(result);
-    })
-
-    app.post('/products', async (req, res) => {
-      const product = req.body;
-      console.log('new product', product);
-      const result = await usersCollectionProducts.insertOne(product);
-      res.send(result);
-    })
-
-    app.post('/cart', async (req, res) => {
-      const product = req.body;
-      console.log('new cart product', product);
-      const result = await usersCollectionCart.insertOne(product);
-      res.send(result);
-    })
-
-    app.delete('/cart/:id', async (req, res) => {
-      const id = req.params.id;
-      console.log('delete server id: ', id);
-      const query = { _id: new ObjectId(id) };
-      const result = await usersCollectionCart.deleteOne(query);
-      res.send(result);
-    }) */
-
 
     // Send a ping to confirm a successful connection
     //await client.db("admin").command({ ping: 1 });
