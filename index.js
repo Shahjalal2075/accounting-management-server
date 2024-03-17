@@ -33,6 +33,7 @@ async function run() {
     const purchaseInvoice = database.collection("purchaseInvoice");
     const saleInvoice = database.collection("saleInvoice");
     const salesReport = database.collection("salesReport");
+    const conceptoReport = database.collection("conceptoReport");
 
     app.get('/user-list', async (req, res) => {
       const cursor = users.find()
@@ -69,6 +70,31 @@ async function run() {
         }
       }
       const result = await salesReport.updateOne(filter, updatedProduct, options);
+      res.send(result);
+    })
+    app.get('/concepto-report', async (req, res) => {
+      const cursor = conceptoReport.find()
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+    app.get('/concepto-report/:name', async (req, res) => {
+      const name = req.params.name;
+      const query = { name: name }
+      const product = await conceptoReport.findOne(query);
+      res.send(product);
+    })
+    app.put('/concepto-report/:name', async (req, res) => {
+      const name = req.params.name;
+      const product = req.body;
+      const filter = { name: name };
+      const options = { upsert: true };
+      console.log('update product : ', product);
+      const updatedProduct = {
+        $set: {
+          value: product.value,
+        }
+      }
+      const result = await conceptoReport.updateOne(filter, updatedProduct, options);
       res.send(result);
     })
 
