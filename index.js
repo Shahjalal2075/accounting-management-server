@@ -206,6 +206,7 @@ async function run() {
           company: product.company,
           fecha: product.fecha,
           fechDePago: product.fechDePago,
+          tipoDeIngreso: product.tipoDeIngreso,
           formaDePago: product.formaDePago,
           modificado: product.modificado,
           monto: product.monto,
