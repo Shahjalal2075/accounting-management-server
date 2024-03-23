@@ -65,8 +65,10 @@ async function run() {
       console.log('update product : ', product);
       const updatedProduct = {
         $set: {
-          Purchase: product.Purchase,
-          Sale: product.Sale,
+          Compra: product.Compra,
+          Ventas: product.Ventas,
+          PTax: product.PTax,
+          STax: product.STax,
         }
       }
       const result = await salesReport.updateOne(filter, updatedProduct, options);
@@ -91,6 +93,7 @@ async function run() {
       console.log('update product : ', product);
       const updatedProduct = {
         $set: {
+          record: product.record,
           value: product.value,
         }
       }
@@ -187,6 +190,8 @@ async function run() {
           tipoList: product.tipoList,
           tipoCk: product.tipoCk,
           ammount: product.ammount,
+          ammountDisscount: product.ammountDisscount,
+          mark: product.mark
         }
       }
       const result = await purchaseInvoice.updateOne(filter, updatedProduct, options);
@@ -218,7 +223,8 @@ async function run() {
           discounts: product.discounts,
           discountAmmount: product.discountAmmount,
           totalDis: product.totalDis,
-
+          ammountDisscount: product.ammountDisscount,
+          mark: product.mark
         }
       }
       const result = await saleInvoice.updateOne(filter, updatedProduct, options);
