@@ -51,16 +51,30 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
-    app.get('/sales-report/:name', async (req, res) => {
+    app.post('/sales-report', async (req, res) => {
+      const user = req.body;
+      console.log('Sales Add', user);
+      const result = await salesReport.insertOne(user);
+      res.send(result);
+    })
+    app.get('/sales-report/:mail', async (req, res) => {
+      const mail = req.params.mail;
+      const query = { mail: mail }
+      const product = await salesReport.find(query).toArray();
+      res.send(product);
+    })
+    app.get('/sales-report/:mail/:name', async (req, res) => {
       const name = req.params.name;
-      const query = { name: name }
+      const mail = req.params.mail;
+      const query = { name: name, mail: mail }
       const product = await salesReport.findOne(query);
       res.send(product);
     })
-    app.put('/sales-report/:name', async (req, res) => {
+    app.put('/sales-report/:mail/:name', async (req, res) => {
       const name = req.params.name;
+      const mail = req.params.mail;
       const product = req.body;
-      const filter = { name: name };
+      const filter = { name: name, mail: mail };
       const options = { upsert: true };
       console.log('update product : ', product);
       const updatedProduct = {
@@ -79,16 +93,30 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
-    app.get('/concepto-report/:name', async (req, res) => {
+    app.post('/concepto-report', async (req, res) => {
+      const user = req.body;
+      console.log('concepto Add', user);
+      const result = await conceptoReport.insertOne(user);
+      res.send(result);
+    })
+    app.get('/concepto-report/:mail', async (req, res) => {
+      const mail = req.params.mail;
+      const query = { mail: mail }
+      const product = await conceptoReport.find(query).toArray();
+      res.send(product);
+    })
+    app.get('/concepto-report/:mail/:name', async (req, res) => {
       const name = req.params.name;
-      const query = { name: name }
+      const mail = req.params.mail;
+      const query = { name: name, mail: mail }
       const product = await conceptoReport.findOne(query);
       res.send(product);
     })
-    app.put('/concepto-report/:name', async (req, res) => {
+    app.put('/concepto-report/:mail/:name', async (req, res) => {
       const name = req.params.name;
+      const mail = req.params.mail;
       const product = req.body;
-      const filter = { name: name };
+      const filter = { name: name, mail: mail };
       const options = { upsert: true };
       console.log('update product : ', product);
       const updatedProduct = {
@@ -127,6 +155,20 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+    app.get('/sale-invoice/:mail', async (req, res) => {
+      const mail = req.params.mail;
+      const query = { mail: mail }
+      const cursor = saleInvoice.find(query)
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+    app.get('/purchase-invoice/:mail', async (req, res) => {
+      const mail = req.params.mail;
+      const query = { mail: mail }
+      const cursor = purchaseInvoice.find(query)
+      const result = await cursor.toArray();
+      res.send(result);
+    })
     app.post('/purchase-invoice', async (req, res) => {
       const invoice = req.body;
       console.log('invoice Add', invoice);
@@ -138,6 +180,13 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
+    app.get('/sale-invoice/:mail', async (req, res) => {
+      const mail = req.params.mail;
+      const query = { mail: mail }
+      const cursor = saleInvoice.find(query)
+      const result = await cursor.toArray();
+      res.send(result);
+    })
     app.post('/sale-invoice', async (req, res) => {
       const invoice = req.body;
       console.log('invoice Add', invoice);
@@ -145,23 +194,26 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/purchase-invoice/:id', async (req, res) => {
+    app.get('/purchase-invoice/:mail/:id', async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
+      const mail = req.params.mail;
+      const query = { _id: new ObjectId(id), mail: mail }
       const product = await purchaseInvoice.findOne(query);
       res.send(product);
     })
-    app.get('/sale-invoice/:id', async (req, res) => {
+    app.get('/sale-invoice/:mail/:id', async (req, res) => {
       const id = req.params.id;
-      const query = { _id: new ObjectId(id) }
+      const mail = req.params.mail;
+      const query = { _id: new ObjectId(id), mail: mail }
       const product = await saleInvoice.findOne(query);
       res.send(product);
     })
 
-    app.put('/purchase-invoice/:id', async (req, res) => {
+    app.put('/purchase-invoice/:mail/:id', async (req, res) => {
       const id = req.params.id;
+      const mail = req.params.mail;
       const product = req.body;
-      const filter = { _id: new ObjectId(id) };
+      const filter = { _id: new ObjectId(id), mail: mail };
       const options = { upsert: true };
       console.log('update product : ', product);
       const updatedProduct = {
@@ -197,10 +249,11 @@ async function run() {
       const result = await purchaseInvoice.updateOne(filter, updatedProduct, options);
       res.send(result);
     })
-    app.put('/sale-invoice/:id', async (req, res) => {
+    app.put('/sale-invoice/:mail/:id', async (req, res) => {
       const id = req.params.id;
+      const mail = req.params.mail;
       const product = req.body;
-      const filter = { _id: new ObjectId(id) };
+      const filter = { _id: new ObjectId(id), mail: mail };
       const options = { upsert: true };
       console.log('update product : ', product);
       const updatedProduct = {
